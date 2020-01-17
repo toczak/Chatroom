@@ -13,27 +13,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <%--<link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">--%>
 
     <title>Chatroom | Talk with everyone</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/pricing/">
-
-    <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
 </head>
 
 <body>
 
+<jsp:include page="include/navbar.jsp"/>
 
-<div class="d-flex flex-column flex-md-row align-items-center p-1 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">Chatroom</h5>
-    <a class="btn btn-outline-primary mr-2" href="#">Zaloguj się</a>
-    <a class="btn btn-outline-primary" href="#">Zarejestruj się</a>
-</div>
+
+<%--<div class="d-flex flex-column flex-md-row align-items-center p-1 px-md-4 mb-3 bg-white border-bottom box-shadow">--%>
+    <%--<h5 class="my-0 mr-md-auto font-weight-normal">Chatroom</h5>--%>
+    <%--<a class="btn btn-outline-primary mr-2" href="#">Zaloguj się</a>--%>
+    <%--<a class="btn btn-outline-primary" href="#">Zarejestruj się</a>--%>
+<%--</div>--%>
+
 <div class="sortDiv">
     Sortowanie:
     <select name="selectSort">
@@ -83,6 +80,8 @@
         </div>
     </footer>
 </div>
+
+${infoRegister}
 
 
 <!-- Bootstrap core JavaScript

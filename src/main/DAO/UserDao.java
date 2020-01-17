@@ -115,5 +115,28 @@ public class UserDao {
         }
         return false;
     }
+
+    public boolean checkUserBeforeRegister(String username, String email) {
+        Transaction transaction = null;
+        UserEntity user = null;
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            user = (UserEntity) session.createQuery("from UserEntity where username = :username OR email=:email")
+                    .setParameter("username",username)
+                    .setParameter("email",email)
+                    .uniqueResult();
+            if(user==null){
+                return true;
+            }
+            transaction.commit();
+        }
+        catch (Exception e){
+            if(transaction!=null){
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
