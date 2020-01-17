@@ -7,6 +7,9 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Chatroom" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Hibernate 5.4.9-5.4.9" />
+        </element>
       </element>
     </root>
   </artifact>

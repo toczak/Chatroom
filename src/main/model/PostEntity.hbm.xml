@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="main.model.PostEntity" table="post" schema="chatroom">
+        <id name="id">
+            <column name="id" sql-type="int(11)"/>
+        </id>
+        <property name="idUser">
+            <column name="id_user" sql-type="int(11)"/>
+        </property>
+        <property name="text">
+            <column name="text" sql-type="varchar(1000)" length="1000"/>
+        </property>
+        <property name="date">
+            <column name="date" sql-type="datetime"/>
+        </property>
+        <many-to-one name="userByIdUser" class="main.model.UserEntity">
+            <column name="id_user"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>
