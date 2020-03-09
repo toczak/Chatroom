@@ -1,5 +1,6 @@
 package main.servlets;
 
+import main.DAO.PostDao;
 import main.DAO.UserDao;
 import main.model.UserEntity;
 
@@ -16,6 +17,12 @@ import java.util.regex.Pattern;
 
 @WebServlet(name = "RegisterServlet")
 public class RegisterServlet extends HttpServlet {
+    private UserDao userDao;
+
+    public void init() {
+        userDao = new UserDao();
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
@@ -59,7 +66,6 @@ public class RegisterServlet extends HttpServlet {
                 out.println("<script>alert('Problem with registration! Check all fields.');</script>");
                 requestDispatcher.include(request, response);
             } else {
-                UserDao userDao = new UserDao();
                 //if user exists - return false
                 if(!userDao.checkUserBeforeRegister(name,email)){
                     RequestDispatcher requestDispatcher = request.getRequestDispatcher("register.jsp");
@@ -82,7 +88,11 @@ public class RegisterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("register.jsp");
+        RequestDispatcher requestDispatcher;
+        if(request.getSession().getAttribute("user")==null)
+            requestDispatcher = request.getRequestDispatcher("register.jsp");
+        else
+            requestDispatcher = request.getRequestDispatcher("/index");
         requestDispatcher.forward(request, response);
     }
 }

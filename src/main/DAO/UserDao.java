@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 public class UserDao {
 
+
     public void saveUser(UserEntity user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -76,7 +77,7 @@ public class UserDao {
         return user;
     }
 
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public List<UserEntity> getAllUser() {
 
         Transaction transaction = null;
@@ -94,21 +95,43 @@ public class UserDao {
         return listOfUser;
     }
 
-    public boolean validateLogin(String username, String password){
+    public UserEntity validateLoginAndReturnUser(String username, String email, String password) {
         Transaction transaction = null;
         UserEntity user = null;
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            user = (UserEntity) session.createQuery("from UserEntity where username = :username")
-                    .setParameter("username",username)
+            user = (UserEntity) session.createQuery("from UserEntity where username = :username OR email = :email")
+                    .setParameter("username", username)
+                    .setParameter("email", email)
                     .uniqueResult();
-            if(user!=null && user.getPassword().equals(password)){
+            if (user != null && user.getPassword().equals(password)) {
+                return user;
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean checkUserBeforeRegister(String username, String email) {
+        Transaction transaction = null;
+        UserEntity user = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            user = (UserEntity) session.createQuery("from UserEntity where username = :username OR email=:email")
+                    .setParameter("username", username)
+                    .setParameter("email", email)
+                    .uniqueResult();
+            if (user == null) {
                 return true;
             }
             transaction.commit();
-        }
-        catch (Exception e){
-            if(transaction!=null){
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
@@ -116,27 +139,27 @@ public class UserDao {
         return false;
     }
 
-    public boolean checkUserBeforeRegister(String username, String email) {
+    public int getIdByLogin(String username) {
         Transaction transaction = null;
         UserEntity user = null;
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            user = (UserEntity) session.createQuery("from UserEntity where username = :username OR email=:email")
-                    .setParameter("username",username)
-                    .setParameter("email",email)
+            user = (UserEntity) session.createQuery("from UserEntity where username = :username")
+                    .setParameter("username", username)
                     .uniqueResult();
-            if(user==null){
-                return true;
+            if (user != null) {
+                return user.getId();
             }
             transaction.commit();
-        }
-        catch (Exception e){
-            if(transaction!=null){
+        } catch (Exception e) {
+            if (transaction != null) {
                 transaction.rollback();
             }
             e.printStackTrace();
         }
-        return false;
+        return 0;
     }
+
+
 }
 

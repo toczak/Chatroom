@@ -8,7 +8,6 @@ import java.util.Objects;
 @Table(name = "post", schema = "chatroom")
 public class PostEntity {
     private int id;
-//    private int idUser;
     private String text;
     private Timestamp date;
     private UserEntity userByIdUser;
@@ -22,16 +21,6 @@ public class PostEntity {
     public void setId(int id) {
         this.id = id;
     }
-
-//    @Basic
-//    @Column(name = "id_user", nullable = false)
-//    public int getIdUser() {
-//        return idUser;
-//    }
-//
-//    public void setIdUser(int idUser) {
-//        this.idUser = idUser;
-//    }
 
     @Basic
     @Column(name = "text", nullable = false, length = 1000)

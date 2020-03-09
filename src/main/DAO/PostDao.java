@@ -77,13 +77,33 @@ public class PostDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<PostEntity> getAllPost() {
+    public List<PostEntity> getAllPost(boolean isSortFromLatest) {
 
         Transaction transaction = null;
         List<PostEntity> listOfPost = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            listOfPost = session.createQuery("from PostEntity").getResultList();
+            if (isSortFromLatest)
+                listOfPost = session.createQuery("from PostEntity order by date desc").getResultList();
+            else
+                listOfPost = session.createQuery("from PostEntity").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return listOfPost;
+    }
+
+    public List<PostEntity> getAllPostByUser(String username) {
+
+        Transaction transaction = null;
+        List<PostEntity> listOfPost = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            listOfPost = session.createQuery("from PostEntity where userByIdUser.username = :username").setParameter("username",username).getResultList();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {

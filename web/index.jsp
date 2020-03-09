@@ -25,58 +25,70 @@
 <jsp:include page="include/navbar.jsp"/>
 
 
-<%--<div class="d-flex flex-column flex-md-row align-items-center p-1 px-md-4 mb-3 bg-white border-bottom box-shadow">--%>
-    <%--<h5 class="my-0 mr-md-auto font-weight-normal">Chatroom</h5>--%>
-    <%--<a class="btn btn-outline-primary mr-2" href="#">Zaloguj się</a>--%>
-    <%--<a class="btn btn-outline-primary" href="#">Zarejestruj się</a>--%>
-<%--</div>--%>
-
 <div class="sortDiv">
-    Sortowanie:
-    <select name="selectSort">
-        <option value="new">Najnowsze</option>
-        <option value="old">Najstarsze</option>
-    </select>
+    <form method="post">
+        Sorting:
+        <select name="selectSort" onchange="executeSelect(this.form)">
+            <option value="new" <c:if test="${sortByLatest==true}">selected</c:if>>Latest</option>
+            <option value="old" <c:if test="${sortByLatest==false}">selected</c:if>>Oldest</option>
+        </select>
+    </form>
+</div>
+
+<div class="searchDiv">
+    <form method="get" action="search">
+        Search by username:
+        <input type="text" name="username"/>
+        <input type="submit" value="Search">
+    </form>
 </div>
 <div class="container">
     <div class="px-4 py-4 chat-box bg-white">
-
         <c:forEach items="${listPost}" var="post">
             <div class="card mb-4">
-                <div class="card-header">
-                    Użytkownik <b>${post.userByIdUser.username}
-                </b> napisał dnia <i>
+                <div class="card-header
+                <c:if test="${sessionScope.user.id==post.userByIdUser.id}">
+                <c:out value="bg-primary"/>
+                </c:if>"
+                >
+                    User <b>
+                    <c:out value="${post.userByIdUser.username}"/>
+                </b> wrote on <i>
                     <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${post.date}"/>
                 </i>:
                 </div>
                 <div class="card-body">
-                    <p class="card-text">${post.text}</p>
+                    <p class="card-text">
+                            <c:out value="${post.text}"/></p>
                 </div>
             </div>
         </c:forEach>
-
     </div>
 
-    <!-- Typing area -->
-    <form action="#" class="bg-light">
-        <div class="input-group">
-            <textarea cols="115" name="textareaMessage" placeholder="Napisz wiadomość..."></textarea>
-            <%--<input type="text" placeholder="Type a message" aria-describedby="button-addon2"--%>
-            <%--class="form-control rounded-0 border-0 py-4 bg-light">--%>
-            <div class="input-group-append">
-                <input type="submit" name="buttonSendMessage" class="btn btn-primary" value="Wyślij"/>
-                <%--<button id="button-addon2" type="submit" class="btn btn-link"><i class="fa fa-paper-plane"></i>--%>
-                <%--</button>--%>
-            </div>
-        </div>
-    </form>
+    <div class="bg-white">
+        <c:choose>
+            <c:when test="${sessionScope.user!=null}">
+                <form method="post" action="add">
+                    <div class="input-group">
+                        <textarea cols="115" name="textareaMessage" placeholder="Write message..." required></textarea>
+                        <div class="input-group-append">
+                            <input type="submit" name="buttonSendMessage" class="btn btn-primary" value="Send"/>
+                        </div>
+                    </div>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <div class="text-center"><p class="mt-2 h5 font-weight-bold">Please login to comment.</p></div>
+            </c:otherwise>
+        </c:choose>
+    </div>
 </div>
 <hr class="mt-1">
 
 <div class="container">
     <footer class="page-footer font-small stylish-color-dark ">
         <div class="footer-copyright text-center mb-3">© <?php echo date("Y"); ?> Copyright:
-            <a href="https://github.com/toczak"> Patryk Potoczak</a>. Wszelkie prawa zastrzeżone.
+            <a href="https://github.com/toczak"> Patryk Potoczak</a>. All rights reserved.
         </div>
     </footer>
 </div>
@@ -94,6 +106,11 @@ ${infoRegister}
 <script src="assets/js/vendor/popper.min.js"></script>
 <script src="dist/js/bootstrap.min.js"></script>
 <script src="assets/js/vendor/holder.min.js"></script>
+<script>
+    function executeSelect(form){
+        form.submit();
+    }
+</script>
 <script>
     Holder.addTheme('thumb', {
         bg: '#55595c',
