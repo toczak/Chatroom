@@ -3,12 +3,12 @@
 
 ## Technologies
 * Java 8
-* Servlets
+* Servlet
 * JSP (JSTL)
-* JSF
-* JDBC
+* Hibernate 5
 * MySQL
 * Bootstrap 4
+
 
 ## Screenshots
 ![Home page 1](./web/images-readme/home-page-1.jpg)
